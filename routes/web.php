@@ -20,6 +20,9 @@ $router->group(['middleware' => []], function () use ($router) {
    $router->post('/register', ['uses' => 'AuthController@register']);
    $router->post('/password_recovery_request', ['uses' => 'AuthController@passwordRecoveryRequest']);
    $router->get('/password_recovery', ['uses' => 'AuthController@passwordRecovery']);
+
+   $router->post('download/pdf', ['uses' => 'Negocio\ExporterController@pdf_file']);
+   $router->post('download/template', ['uses' => 'Negocio\ExporterController@pdf_template']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
@@ -79,15 +82,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/result', ['uses' => 'CRUD\ResultController@delete']);
    $router->post('/result/masive_load', ['uses' => 'CRUD\ResultController@masiveLoad']);
 
-   //CRUD ResultParam
-   $router->post('/resultparam', ['uses' => 'CRUD\ResultParamController@post']);
-   $router->get('/resultparam', ['uses' => 'CRUD\ResultParamController@get']);
-   $router->get('/resultparam/paginate', ['uses' => 'CRUD\ResultParamController@paginate']);
-   $router->get('/resultparam/backup', ['uses' => 'CRUD\ResultParamController@backup']);
-   $router->put('/resultparam', ['uses' => 'CRUD\ResultParamController@put']);
-   $router->delete('/resultparam', ['uses' => 'CRUD\ResultParamController@delete']);
-   $router->post('/resultparam/masive_load', ['uses' => 'CRUD\ResultParamController@masiveLoad']);
-
    //CRUD ResultAttachment
    $router->post('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@post']);
    $router->get('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@get']);
@@ -145,6 +139,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/profile/masive_load', ['uses' => 'CRUD\ProfileController@masiveLoad']);
 
     //CRUD Template
+    $router->get('/template/by_laboratory_id', ['uses' => 'CRUD\TemplateController@get_by_laboratory_id']);
     $router->post('/template', ['uses' => 'CRUD\TemplateController@post']);
     $router->get('/template', ['uses' => 'CRUD\TemplateController@get']);
     $router->get('/template/paginate', ['uses' => 'CRUD\TemplateController@paginate']);

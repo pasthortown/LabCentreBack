@@ -23,13 +23,20 @@ class TemplateController extends Controller
        }
     }
 
+    function get_by_laboratory_id(Request $data)
+    {
+       $laboratory_id = $data['laboratory_id'];
+       return response()->json(Template::where('laboratory_id',intval($laboratory_id))->get(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];
+       $laboratory_id = $data['laboratory_id'];
        $currentPage = $data->input('page', 1);
        $offset = ($currentPage - 1) * $size;
        $total = Template::count();
-       $result = Template::offset($offset)->limit(intval($size))->get();
+       $result = Template::offset($offset)->limit(intval($size))->where('laboratory_id',intval($laboratory_id))->get();
        $toReturn = new LengthAwarePaginator($result, $total, $size, $currentPage, [
           'path' => Paginator::resolveCurrentPath(),
           'pageName' => 'page'
@@ -49,8 +56,10 @@ class TemplateController extends Controller
           }
           $template = Template::create([
              'id' => $id,
-             'variables' => $result['variables'],
              'body' => $result['body'],
+             'orientation' => $result['orientation'],
+             'title' => $result['title'],
+             'laboratory_id' => intval($result['laboratory_id']),
           ]);
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -63,8 +72,10 @@ class TemplateController extends Controller
        try{
           $result = $data->json()->all();
           $template = Template::where('id',intval($result['id']))->first();
-          $template->variables = $result['variables'];
           $template->body = $result['body'];
+          $template->orientation = $result['orientation'];
+          $template->title = $result['title'];
+          $template->laboratory_id = intval($result['laboratory_id']);
           $template->save();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -93,14 +104,17 @@ class TemplateController extends Controller
          $exist = Template::where('id',$result['id'])->first();
          if ($exist) {
           $template = Template::where('id',intval($result['id']))->first();
-          $template->variables = $result['variables'];
           $template->body = $result['body'];
+          $template->orientation = $result['orientation'];
+          $template->title = $result['title'];
           $template->save();
          } else {
           $template = Template::create([
              'id' => $result['id'],
-             'variables' => $result['variables'],
              'body' => $result['body'],
+             'orientation' => $result['orientation'],
+             'title' => $result['title'],
+             'laboratory_id' => intval($result['laboratory_id']),
           ]);
          }
        }
