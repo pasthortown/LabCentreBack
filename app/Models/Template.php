@@ -15,7 +15,7 @@ class Template extends Model
      * @var array
      */
     protected $fillable = [
-       'id','body','orientation','title','laboratory_id'
+       'id','body','orientation','title','laboratory_id', 'sample_description'
     ];
 
     /**

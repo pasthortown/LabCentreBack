@@ -27,4 +27,9 @@ class Sample extends Model
        
     ];
 
+    function sample_param()
+    {
+       return $this->embedsMany('App\SampleParam');
+    }
+
 }

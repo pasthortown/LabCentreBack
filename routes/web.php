@@ -136,6 +136,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/profile/masive_load', ['uses' => 'CRUD\ProfileController@masiveLoad']);
 
     //CRUD Template
+    $router->get('/template/by_sample_description', ['uses' => 'CRUD\TemplateController@get_by_sample_description']);
     $router->get('/template/by_laboratory_id', ['uses' => 'CRUD\TemplateController@get_by_laboratory_id']);
     $router->post('/template', ['uses' => 'CRUD\TemplateController@post']);
     $router->get('/template', ['uses' => 'CRUD\TemplateController@get']);

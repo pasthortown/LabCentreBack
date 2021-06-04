@@ -23,6 +23,13 @@ class TemplateController extends Controller
        }
     }
 
+    function get_by_sample_description(Request $data)
+    {
+       $sample_description = $data['sample_description'];
+       $laboratory_id = $data['laboratory_id'];
+       return response()->json(Template::where('laboratory_id',intval($laboratory_id))->where('sample_description',$sample_description)->get(),200);
+    }
+
     function get_by_laboratory_id(Request $data)
     {
        $laboratory_id = $data['laboratory_id'];
@@ -60,6 +67,7 @@ class TemplateController extends Controller
              'orientation' => $result['orientation'],
              'title' => $result['title'],
              'laboratory_id' => intval($result['laboratory_id']),
+             'sample_description' => $result['sample_description'],
           ]);
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -76,6 +84,7 @@ class TemplateController extends Controller
           $template->orientation = $result['orientation'];
           $template->title = $result['title'];
           $template->laboratory_id = intval($result['laboratory_id']);
+          $template->sample_description = $result['sample_description'];
           $template->save();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -107,6 +116,7 @@ class TemplateController extends Controller
           $template->body = $result['body'];
           $template->orientation = $result['orientation'];
           $template->title = $result['title'];
+          $template->sample_description = $result['sample_description'];
           $template->save();
          } else {
           $template = Template::create([
@@ -115,6 +125,7 @@ class TemplateController extends Controller
              'orientation' => $result['orientation'],
              'title' => $result['title'],
              'laboratory_id' => intval($result['laboratory_id']),
+             'sample_description' => $result['sample_description'],
           ]);
          }
        }
