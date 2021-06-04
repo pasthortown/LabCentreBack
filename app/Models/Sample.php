@@ -15,7 +15,7 @@ class Sample extends Model
      * @var array
      */
     protected $fillable = [
-       'id','patient_id','description','acquisition_date','status','laboratory_id',
+       'id','patient_id','description','acquisition_date','status','laboratory_id','sample_param'
     ];
 
     /**
@@ -24,12 +24,7 @@ class Sample extends Model
      * @var array
      */
     protected $hidden = [
-       
-    ];
 
-    function sample_param()
-    {
-       return $this->embedsMany('App\SampleParam');
-    }
+    ];
 
 }

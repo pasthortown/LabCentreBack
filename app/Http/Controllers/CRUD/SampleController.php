@@ -54,6 +54,7 @@ class SampleController extends Controller
              'acquisition_date' => $result['acquisition_date'],
              'status' => $result['status'],
              'laboratory_id' => intval($result['laboratory_id']),
+             'sample_param' => $result['sample_param'],
           ]);
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -71,6 +72,7 @@ class SampleController extends Controller
           $sample->acquisition_date = $result['acquisition_date'];
           $sample->status = $result['status'];
           $sample->laboratory_id = intval($result['laboratory_id']);
+          $sample->sample_param = $result['sample_param'];
           $sample->save();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -104,6 +106,7 @@ class SampleController extends Controller
           $sample->acquisition_date = $result['acquisition_date'];
           $sample->status = $result['status'];
           $sample->laboratory_id = intval($result['laboratory_id']);
+          $sample->sample_param = $result['sample_param'];
           $sample->save();
          } else {
           $sample = Sample::create([
@@ -113,6 +116,7 @@ class SampleController extends Controller
              'acquisition_date' => $result['acquisition_date'],
              'status' => $result['status'],
              'laboratory_id' => intval($result['laboratory_id']),
+             'sample_param' => $result['sample_param'],
           ]);
          }
        }

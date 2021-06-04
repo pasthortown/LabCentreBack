@@ -15,7 +15,7 @@ class SampleParam extends Model
      * @var array
      */
     protected $fillable = [
-       'id','sample_id','description','value_text','value_double',
+       'description','value_text','value_double','type','notes','units'
     ];
 
     /**
@@ -24,7 +24,7 @@ class SampleParam extends Model
      * @var array
      */
     protected $hidden = [
-       
+
     ];
 
 }

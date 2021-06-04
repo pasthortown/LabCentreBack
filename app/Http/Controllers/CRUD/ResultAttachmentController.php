@@ -48,8 +48,8 @@ class ResultAttachmentController extends Controller
              $id = 1;
           }
           $resultattachment = ResultAttachment::create([
-             'id' => intval($id),
-             'result_id' => intval($result['result_id']),
+             'id' => $id,
+             'sample_id' => $result['sample_id'],
              'result_attachment_file_type' => $result['result_attachment_file_type'],
              'result_attachment_file_name' => $result['result_attachment_file_name'],
              'result_attachment_file' => $result['result_attachment_file'],
@@ -65,7 +65,7 @@ class ResultAttachmentController extends Controller
        try{
           $result = $data->json()->all();
           $resultattachment = ResultAttachment::where('id',intval($result['id']))->first();
-          $resultattachment->result_id = intval($result['result_id']);
+          $resultattachment->sample_id = $result['sample_id'];
           $resultattachment->result_attachment_file_type = $result['result_attachment_file_type'];
           $resultattachment->result_attachment_file_name = $result['result_attachment_file_name'];
           $resultattachment->result_attachment_file = $result['result_attachment_file'];
@@ -94,18 +94,18 @@ class ResultAttachmentController extends Controller
       $incomming = $data->json()->all();
       $masiveData = $incomming['data'];
        foreach($masiveData as $result) {
-         $exist = ResultAttachment::where('id',intval($result['id']))->first();
+         $exist = ResultAttachment::where('id',$result['id'])->first();
          if ($exist) {
           $resultattachment = ResultAttachment::where('id',intval($result['id']))->first();
-          $resultattachment->result_id = intval($result['result_id']);
+          $resultattachment->sample_id = $result['sample_id'];
           $resultattachment->result_attachment_file_type = $result['result_attachment_file_type'];
           $resultattachment->result_attachment_file_name = $result['result_attachment_file_name'];
           $resultattachment->result_attachment_file = $result['result_attachment_file'];
           $resultattachment->save();
          } else {
           $resultattachment = ResultAttachment::create([
-             'id' => intval($result['id']),
-             'result_id' => intval($result['result_id']),
+             'id' => $result['id'],
+             'sample_id' => $result['sample_id'],
              'result_attachment_file_type' => $result['result_attachment_file_type'],
              'result_attachment_file_name' => $result['result_attachment_file_name'],
              'result_attachment_file' => $result['result_attachment_file'],

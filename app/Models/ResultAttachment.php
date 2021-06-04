@@ -15,7 +15,7 @@ class ResultAttachment extends Model
      * @var array
      */
     protected $fillable = [
-       'id','result_id','result_attachment_file_type','result_attachment_file_name','result_attachment_file',
+       'id','sample_id','result_attachment_file_type','result_attachment_file_name','result_attachment_file',
     ];
 
     /**

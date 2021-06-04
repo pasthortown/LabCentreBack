@@ -61,24 +61,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/sample', ['uses' => 'CRUD\SampleController@delete']);
    $router->post('/sample/masive_load', ['uses' => 'CRUD\SampleController@masiveLoad']);
 
-   //CRUD SampleParam
-   $router->post('/sampleparam', ['uses' => 'CRUD\SampleParamController@post']);
-   $router->get('/sampleparam', ['uses' => 'CRUD\SampleParamController@get']);
-   $router->get('/sampleparam/paginate', ['uses' => 'CRUD\SampleParamController@paginate']);
-   $router->get('/sampleparam/backup', ['uses' => 'CRUD\SampleParamController@backup']);
-   $router->put('/sampleparam', ['uses' => 'CRUD\SampleParamController@put']);
-   $router->delete('/sampleparam', ['uses' => 'CRUD\SampleParamController@delete']);
-   $router->post('/sampleparam/masive_load', ['uses' => 'CRUD\SampleParamController@masiveLoad']);
-
-   //CRUD Result
-   $router->post('/result', ['uses' => 'CRUD\ResultController@post']);
-   $router->get('/result', ['uses' => 'CRUD\ResultController@get']);
-   $router->get('/result/paginate', ['uses' => 'CRUD\ResultController@paginate']);
-   $router->get('/result/backup', ['uses' => 'CRUD\ResultController@backup']);
-   $router->put('/result', ['uses' => 'CRUD\ResultController@put']);
-   $router->delete('/result', ['uses' => 'CRUD\ResultController@delete']);
-   $router->post('/result/masive_load', ['uses' => 'CRUD\ResultController@masiveLoad']);
-
    //CRUD ResultAttachment
    $router->post('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@post']);
    $router->get('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@get']);
