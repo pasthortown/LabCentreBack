@@ -15,7 +15,7 @@ class Sample extends Model
      * @var array
      */
     protected $fillable = [
-       'id','patient_id','description','acquisition_date','status','laboratory_id','sample_param'
+       'id','patient_id','analysys_title','description','acquisition_date','status','laboratory_id','sample_param'
     ];
 
     /**

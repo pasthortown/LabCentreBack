@@ -7,6 +7,7 @@ use Validator;
 use Exception;
 use App\Models\Laboratory;
 use App\Models\LaboratoryAttachment;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +21,72 @@ use App\Http\Controllers\Controller;
 class ExporterController extends Controller
 {
 
+  function print_sample_result(Request $data) {
+    $request = $data->json()->all();
+    $params = json_decode(json_encode($request['params']),true);
+    $qr = $request['qr'];
+    $qr_content = $request['qr_content'];
+    $sample = $params['sample'];
+    $patient = $params['patient'];
+    $laboratory_id = $params['laboratory_id'];
+    $laboratory = Laboratory::where('id', intval($laboratory_id))->first();
+    $title = $params['doc_name'];
+    $template = Template::where('laboratory_id', $laboratory_id)
+                        ->where('sample_description', $sample['description'])
+                        ->where('title',$sample['analysys_title']
+                        )->first();
+    $pdf_content = $this->build_content_sample_print($template['body'], $sample, $patient);
+    $html = $this->LSstyle($pdf_content, $title, $qr, $qr_content, $laboratory);
+    $orientation = $template['orientation'];
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
+
+  function build_content_sample_print($content, $sample, $patient) {
+    $toReturn = $content;
+    foreach($patient as $key => $value) {
+      $toReturn = str_ireplace('##patient_'.$key.'##', $value, $toReturn);
+    }
+    $toReturn = str_ireplace('##sample_acquisition_date##', $sample['acquisition_date'], $toReturn);
+    $toReturn = str_ireplace('##sample_analysys_title##', $sample['analysys_title'], $toReturn);
+    $toReturn = str_ireplace('##sample_description##', $sample['description'], $toReturn);
+    $toReturn = str_ireplace('##sample_status##', $sample['status'], $toReturn);
+    $toReturn = $this->sample_results($toReturn, $sample['sample_param']);
+    return $toReturn;
+  }
+
+  function sample_results($content, $sample_params) {
+    $toReturn = $content;
+    $body_text = explode('</tr>', $content);
+    $rows = [];
+    foreach($body_text as $element) {
+        $row = explode('<tr',$element);
+        if (sizeof($row) == 2) {
+            $row = $row[1];
+            if (str_contains($row, '##sample_value')) {
+                array_push($rows, $row);
+            }
+        }
+    }
+    foreach($rows as $row) {
+        $new_row = $row;
+        $description = explode('</t', explode('">', explode('id="description', $row)[1])[1])[0];
+        foreach($sample_params as $sample_param) {
+            if ($sample_param['description'] == $description){
+                $new_row = str_ireplace('##sample_value_text##', $sample_param['value_text'], $new_row);
+                $new_row = str_ireplace('##sample_value_double##', $sample_param['value_double'], $new_row);
+                $toReturn = str_ireplace($row, $new_row, $toReturn);
+            }
+        }
+    }
+    return $toReturn;
+  }
+
   function pdf_template(Request $data) {
     $request = $data->json()->all();
     $html_content = $request['html'];
@@ -29,7 +96,7 @@ class ExporterController extends Controller
       $qr = false;
     }
     try {
-      $qr_content = json_encode($request['qr_content']);
+      $qr_content = $request['qr_content'];
     } catch (Exception $e) {
       $qr_content = '';
     }

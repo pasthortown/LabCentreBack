@@ -53,6 +53,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/patient/masive_load', ['uses' => 'CRUD\PatientController@masiveLoad']);
 
    //CRUD Sample
+   $router->get('/sample/look_for_pending_work', ['uses' => 'CRUD\SampleController@look_for_pending_work']);
    $router->post('/sample', ['uses' => 'CRUD\SampleController@post']);
    $router->get('/sample', ['uses' => 'CRUD\SampleController@get']);
    $router->get('/sample/paginate', ['uses' => 'CRUD\SampleController@paginate']);
@@ -128,4 +129,5 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
     $router->delete('/template', ['uses' => 'CRUD\TemplateController@delete']);
     $router->post('/template/masive_load', ['uses' => 'CRUD\TemplateController@masiveLoad']);
     $router->post('/template/download', ['uses' => 'Negocio\ExporterController@pdf_template']);
+    $router->post('/template/print_sample_result', ['uses' => 'Negocio\ExporterController@print_sample_result']);
 });
