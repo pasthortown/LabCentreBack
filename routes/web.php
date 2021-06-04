@@ -20,9 +20,6 @@ $router->group(['middleware' => []], function () use ($router) {
    $router->post('/register', ['uses' => 'AuthController@register']);
    $router->post('/password_recovery_request', ['uses' => 'AuthController@passwordRecoveryRequest']);
    $router->get('/password_recovery', ['uses' => 'AuthController@passwordRecovery']);
-
-   $router->post('download/pdf', ['uses' => 'Negocio\ExporterController@pdf_file']);
-   $router->post('download/template', ['uses' => 'Negocio\ExporterController@pdf_template']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
@@ -147,4 +144,5 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
     $router->put('/template', ['uses' => 'CRUD\TemplateController@put']);
     $router->delete('/template', ['uses' => 'CRUD\TemplateController@delete']);
     $router->post('/template/masive_load', ['uses' => 'CRUD\TemplateController@masiveLoad']);
+    $router->post('/template/download', ['uses' => 'Negocio\ExporterController@pdf_template']);
 });
