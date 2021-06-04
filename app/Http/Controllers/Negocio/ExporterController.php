@@ -25,12 +25,12 @@ class ExporterController extends Controller
     $request = $data->json()->all();
     $params = json_decode(json_encode($request['params']),true);
     $qr = $request['qr'];
-    $qr_content = $request['qr_content'];
     $sample = $params['sample'];
     $patient = $params['patient'];
     $laboratory_id = $params['laboratory_id'];
     $laboratory = Laboratory::where('id', intval($laboratory_id))->first();
     $title = $params['doc_name'];
+    $qr_content = $this->build_qr_content($sample, $patient, $laboratory, $title);
     $template = Template::where('laboratory_id', $laboratory_id)
                         ->where('sample_description', $sample['description'])
                         ->where('title',$sample['analysys_title']
@@ -45,6 +45,22 @@ class ExporterController extends Controller
     $bytes = $pdf->output();
     $toReturn = base64_encode($bytes);
     return response()->json($toReturn, 200);
+  }
+
+  function build_qr_content($sample, $patient, $laboratory, $title) {
+    $toReturn = 'Documento: ' . $title . '. ';
+    $toReturn .= 'Laboratorio: '
+                . $laboratory['description'] . ', '
+                . $laboratory['ruc'] . ', '
+                . $laboratory['main_contact_number'] . '. ';
+    $toReturn .= 'Paciente: '
+                . $patient['identification'] . ', '
+                . $patient['fullname'] . ', '
+                . $patient['age'] . '. ';
+    $toReturn .= 'Análisis: '
+                . $sample['acquisition_date'] . ', '
+                . $sample['analysys_title'] . '. ';
+    return $toReturn;
   }
 
   function build_content_sample_print($content, $sample, $patient) {
