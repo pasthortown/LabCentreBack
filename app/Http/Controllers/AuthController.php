@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Http\Controllers\Controller;
+use App\Models\LaboratoryAuthUser;
 use App\Models\Profile;
 use Exception;
 use App\Models\Profile\User;
@@ -108,6 +109,11 @@ class AuthController extends Controller
       $password = $result['password'];
       $user = User::where('email', $email)->first();
       $user_profiles = UserProfile::where('user_id', $user['id'])->get();
+      $laboratory_auth = LaboratoryAuthUser::where('user_id', $user['id'])->first();
+      if ($laboratory_auth) {
+        $laboratory_id = $laboratory_auth['laboratory_id'];
+      }
+      $laboratory_id = 0;
       if (!$user) {
         return response()->json([
           'error' => 'Bad Credentials'
@@ -121,6 +127,7 @@ class AuthController extends Controller
             'token' => $token,
             'name' => $user->name,
             'id' => $user->id,
+            'laboratory_id' => $laboratory_id,
             'profiles' => $user_profiles
         ], 200);
       }
