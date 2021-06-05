@@ -68,7 +68,8 @@ class ExporterController extends Controller
     foreach($patient as $key => $value) {
       $toReturn = str_ireplace('##patient_'.$key.'##', $value, $toReturn);
     }
-    $toReturn = str_ireplace('##sample_acquisition_date##', $sample['acquisition_date'], $toReturn);
+    $acquisition_date = date("Y-m-d", strtotime($sample['acquisition_date']));
+    $toReturn = str_ireplace('##sample_acquisition_date##', $acquisition_date, $toReturn);
     $toReturn = str_ireplace('##sample_analysys_title##', $sample['analysys_title'], $toReturn);
     $toReturn = str_ireplace('##sample_description##', $sample['description'], $toReturn);
     $toReturn = str_ireplace('##sample_status##', $sample['status'], $toReturn);
