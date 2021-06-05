@@ -15,7 +15,7 @@ class Laboratory extends Model
      * @var array
      */
     protected $fillable = [
-       'id','description','address','geolocation','ruc','responsable_name','main_contact_number','secondary_contact_number'
+       'id','description','address','geolocation','ruc','register','responsable_name','main_contact_number','secondary_contact_number'
     ];
 
     /**

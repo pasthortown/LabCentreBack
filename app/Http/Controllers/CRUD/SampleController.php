@@ -25,6 +25,43 @@ class SampleController extends Controller
        }
     }
 
+    function look_for_history_work(Request $data) {
+        $patient_id = $data['patient_id'];
+        $laboratory_id = $data['laboratory_id'];
+        $samples = Sample::where('laboratory_id', intval($laboratory_id))->where('patient_id', intval($patient_id))->get();
+        $patient = Patient::where('id', intval($patient_id))->first();
+        $toReturn = [];
+        foreach($samples as $sample) {
+            $pending_work = new stdClass();
+            $pending_work->sample = $sample;
+            $pending_work->patient = $patient;
+            array_push($toReturn, $pending_work);
+        }
+        return response()->json($toReturn,200);
+    }
+
+    function look_for_send_documents(Request $data) {
+        $laboratory_id = $data['laboratory_id'];
+        $samples = Sample::where('laboratory_id', intval($laboratory_id))->where('status', 'Impreso')->get();
+        $patients_id = [];
+        foreach($samples as $sample) {
+            array_push($patients_id, $sample['patient_id']);
+        }
+        $patients = Patient::wherein('id', $patients_id)->get();
+        $toReturn = [];
+        foreach($samples as $sample) {
+            $pending_work = new stdClass();
+            $pending_work->sample = $sample;
+            foreach($patients as $patient) {
+                if ($patient['id'] == $sample['patient_id']) {
+                    $pending_work->patient = $patient;
+                }
+            }
+            array_push($toReturn, $pending_work);
+        }
+        return response()->json($toReturn,200);
+    }
+
     function look_for_pending_work(Request $data) {
         $laboratory_id = $data['laboratory_id'];
         $samples = Sample::where('laboratory_id', intval($laboratory_id))->where('status', 'En Proceso')->get();

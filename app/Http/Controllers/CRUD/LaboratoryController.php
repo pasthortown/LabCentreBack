@@ -50,6 +50,7 @@ class LaboratoryController extends Controller
           $laboratory = Laboratory::create([
              'id' => intval($id),
              'ruc' => $result['ruc'],
+             'register' => $result['register'],
              'responsable_name' => $result['responsable_name'],
              'main_contact_number' => $result['main_contact_number'],
              'secondary_contact_number' => $result['secondary_contact_number'],
@@ -72,6 +73,7 @@ class LaboratoryController extends Controller
           $laboratory->address = $result['address'];
           $laboratory->geolocation = $result['geolocation'];
           $laboratory->ruc = $result['ruc'];
+          $laboratory->register = $result['register'];
           $laboratory->responsable_name = $result['responsable_name'];
           $laboratory->main_contact_number = $result['main_contact_number'];
           $laboratory->secondary_contact_number = $result['secondary_contact_number'];
@@ -107,6 +109,7 @@ class LaboratoryController extends Controller
           $laboratory->address = $result['address'];
           $laboratory->geolocation = $result['geolocation'];
           $laboratory->ruc = $result['ruc'];
+          $laboratory->register = $result['register'];
           $laboratory->responsable_name = $result['responsable_name'];
           $laboratory->main_contact_number = $result['main_contact_number'];
           $laboratory->secondary_contact_number = $result['secondary_contact_number'];
@@ -115,6 +118,7 @@ class LaboratoryController extends Controller
           $laboratory = Laboratory::create([
             'id' => intval($id),
             'ruc' => $result['ruc'],
+            'register' => $result['register'],
             'responsable_name' => $result['responsable_name'],
             'main_contact_number' => $result['main_contact_number'],
             'secondary_contact_number' => $result['secondary_contact_number'],

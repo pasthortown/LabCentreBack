@@ -8,6 +8,7 @@ use Exception;
 use App\Models\Laboratory;
 use App\Models\LaboratoryAttachment;
 use App\Models\Template;
+use App\Models\ResultAttachment;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +45,27 @@ class ExporterController extends Controller
     $pdf->loadHTML($html);
     $bytes = $pdf->output();
     $toReturn = base64_encode($bytes);
+    $prev_result_attachment = ResultAttachment::where('sample_id', $sample['id'])->first();
+    if ($prev_result_attachment) {
+        $prev_result_attachment->result_attachment_file_type = 'application/pdf';
+        $prev_result_attachment->result_attachment_file_name = $title;
+        $prev_result_attachment->result_attachment_file = $toReturn;
+        $prev_result_attachment->save();
+    } else {
+        $lastResultAttachment = ResultAttachment::orderBy('id', 'desc')->first();
+        if($lastResultAttachment) {
+            $id = $lastResultAttachment->id + 1;
+        } else {
+            $id = 1;
+        }
+        $resultattachment = ResultAttachment::create([
+            'id' => $id,
+            'sample_id' => $sample['id'],
+            'result_attachment_file_type' => 'application/pdf',
+            'result_attachment_file_name' => $title,
+            'result_attachment_file' => $toReturn,
+        ]);
+    }
     return response()->json($toReturn, 200);
   }
 
@@ -180,7 +202,7 @@ class ExporterController extends Controller
     $html .= '      <header>';
     $html .= '         <img style="position:fixed; height:auto; width:150px; left: 150px; top: 150px;" src="'.$this->get_logo_image($laboratory['id']).'"/>';
     $html .= '         <h3 style="position: fixed; left:0px; right:0px; top:100px; font-family: Arial, Helvetica, sans-serif; text-align:center;">'. $laboratory['description'].'</h3>';
-    $html .= '         <h5 style="position: fixed; left:0px; right:0px; top:125px; font-family: Arial, Helvetica, sans-serif; text-align:center;">RUC: '.$laboratory['ruc'].'</h5>';
+    $html .= '         <h5 style="position: fixed; left:0px; right:0px; top:130px; font-family: Arial, Helvetica, sans-serif; text-align:center;">RUC: '.$laboratory['ruc'].' / REGISTRO: '.$laboratory['register'].'</h5>';
     $html .= '         <h4 style="position: fixed; left:300px; right:0px; top:160px; font-family: Arial, Helvetica, sans-serif; text-align:center;">'.$laboratory['responsable_name'].'</h4>';
     $html .= '         <h6 style="position: fixed; left:300px; right:0px; top:225px; font-family: Arial, Helvetica, sans-serif; text-align:center;">Dirección: '.$laboratory['address'].'</h6>';
     $html .= '         <h6 style="position: fixed; left:300px; right:0px; top:250px; font-family: Arial, Helvetica, sans-serif; text-align:center;">Teléfonos: '.$laboratory['main_contact_number'].' / '.$laboratory['secondary_contact_number'].'</h6>';

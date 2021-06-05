@@ -53,6 +53,8 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/patient/masive_load', ['uses' => 'CRUD\PatientController@masiveLoad']);
 
    //CRUD Sample
+   $router->get('/sample/look_for_history_work', ['uses' => 'CRUD\SampleController@look_for_history_work']);
+   $router->get('/sample/look_for_send_documents', ['uses' => 'CRUD\SampleController@look_for_send_documents']);
    $router->get('/sample/look_for_pending_work', ['uses' => 'CRUD\SampleController@look_for_pending_work']);
    $router->post('/sample', ['uses' => 'CRUD\SampleController@post']);
    $router->get('/sample', ['uses' => 'CRUD\SampleController@get']);
@@ -63,7 +65,10 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/sample/masive_load', ['uses' => 'CRUD\SampleController@masiveLoad']);
 
    //CRUD ResultAttachment
+   $router->post('/resultattachment/send', ['uses' => 'CRUD\ResultAttachmentController@send']);
+   $router->post('/resultattachment/post_by_sample_id', ['uses' => 'CRUD\ResultAttachmentController@post_by_sample_id']);
    $router->post('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@post']);
+   $router->get('/resultattachment/get_by_sample_id', ['uses' => 'CRUD\ResultAttachmentController@get_by_sample_id']);
    $router->get('/resultattachment', ['uses' => 'CRUD\ResultAttachmentController@get']);
    $router->get('/resultattachment/paginate', ['uses' => 'CRUD\ResultAttachmentController@paginate']);
    $router->get('/resultattachment/backup', ['uses' => 'CRUD\ResultAttachmentController@backup']);

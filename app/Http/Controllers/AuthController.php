@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Profile;
 use Exception;
 use App\Models\Profile\User;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
@@ -105,6 +107,7 @@ class AuthController extends Controller
       $email = $result['email'];
       $password = $result['password'];
       $user = User::where('email', $email)->first();
+      $user_profiles = UserProfile::where('user_id', $user['id'])->get();
       if (!$user) {
         return response()->json([
           'error' => 'Bad Credentials'
@@ -117,7 +120,8 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
             'name' => $user->name,
-            'id' => $user->id
+            'id' => $user->id,
+            'profiles' => $user_profiles
         ], 200);
       }
       return response()->json([
@@ -129,7 +133,7 @@ class AuthController extends Controller
     $payload = [
         'subject' => $user->id,
         'creation_time' => time(),
-        'expiration_time' => time() + 60*60
+        'expiration_time' => time() + 16*60*60
     ];
     return JWT::encode($payload, env('JWT_SECRET'));
   }
